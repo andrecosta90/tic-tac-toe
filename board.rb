@@ -1,4 +1,3 @@
-
 # frozen_string_literal: true
 
 class Board
@@ -15,12 +14,9 @@ class Board
   end
 
   def change_state(row, col, value)
-    if (row >= 3 || col >= 3)
-      return false
-    end
-    # raise StandardError, "Invalid position :: row=#{row} col=#{col}" if row >= 3 || col >= 3
-    # raise StandardError, 'No more slots available' if @available_slots <= 0
-    # raise StandardError, 'This slot is already occupied' if grid[row][col] != '_'
+    raise StandardError, "Invalid position :: row=#{row} col=#{col}" if row >= 3 || col >= 3
+    raise StandardError, 'No more slots available' if @available_slots <= 0
+    raise StandardError, 'This slot is already occupied' if grid[row][col] != '_'
 
     @grid[row][col] = value
     @available_slots -= 1
@@ -34,7 +30,7 @@ class Board
     element = check_diagonals
     return element if element
 
-    "DRAW" if available_slots <= 0
+    'DRAW' if available_slots <= 0
   end
 
   private
@@ -51,7 +47,6 @@ class Board
   end
 
   def check_rows_and_columns
-
     (0..2).each do |i|
       element = check_array(grid[i].uniq)
 
@@ -123,8 +118,6 @@ end
 # board.show
 # puts board.available_slots
 # p board.check_winner
-
-
 
 # # board.change_state(2, 3, 'O')
 # # board.show

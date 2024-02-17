@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require './board'
+require './player'
 
 def get_player(round_id)
   round_id.even? ? 'X' : 'O'
@@ -11,23 +12,20 @@ class Game
 
   def initialize
     @board = Board.new
+    @players = [Player.new("player 1", "X"), Player.new("player 2", "O")]
+    @current_player = 0
   end
 
   def run
     board.show
-    round = 0
 
-    result = board.check_winner
-    until result
-      current_player = get_player(round)
-      # puts "Current player #{current_player}"
-      # row, col = gets.split(',').map(&:to_i)
-      # round += 1
-      board.change_state(row, col, current_player)
+    until board.check_winner
+
+      @players[@current_player].play(board)
+      @current_player = 1 - @current_player
       board.show
-      result = board.check_winner
+      puts board.check_winner
     end
-    result
   end
 end
 
