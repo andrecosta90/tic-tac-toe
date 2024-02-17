@@ -12,7 +12,7 @@ class Game
 
   def initialize
     @board = Board.new
-    @players = [Player.new("player 1", "X"), Player.new("player 2", "O")]
+    @players = [Player.new('Player 1', 'X'), Player.new('Player 2', 'O')]
     @current_player = 0
   end
 
@@ -21,11 +21,12 @@ class Game
 
     until board.check_winner
 
-      @players[@current_player].play(board)
+      result = @players[@current_player].make_move(board)
       @current_player = 1 - @current_player
       board.show
-      puts board.check_winner
     end
+
+    result[:tie] ? (puts "It's a TIE!") : (puts "#{result[:winner].name} WINS!")
   end
 end
 
