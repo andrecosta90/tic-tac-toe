@@ -17,6 +17,7 @@ class Player
       puts "Waiting for #{name} ( #{symbol} ) :"
 
       row, col = select_candidate
+      next if col.nil?
       break if board.change_state(row, col, self)
 
       puts 'Invalid move! Try again!'
