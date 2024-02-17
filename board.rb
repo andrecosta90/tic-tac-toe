@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# Represents a Tic-Tac-Toe board.
+# The board maintains the game state, tracks available slots,
+# and checks for a winning condition.
 class Board
   attr_reader :available_slots, :grid
 
@@ -9,6 +12,7 @@ class Board
   end
 
   def show
+    puts
     puts(grid.map { |x| x.join(' | ') })
     puts
   end

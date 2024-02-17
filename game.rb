@@ -3,25 +3,23 @@
 require './board'
 require './player'
 
-def get_player(round_id)
-  round_id.even? ? 'X' : 'O'
-end
-
+# Represents the game logic for a Tic-Tac-Toe game.
+# Manages the game flow, including player turns and checking for a winner or tie
 class Game
   attr_reader :board
 
   def initialize
     @board = Board.new
-    @players = [Player.new('Player 1', 'X'), Player.new('Player 2', 'O')]
+    @players = [Player.new('Player 1', 'X', @board), DumbPlayer.new('Dumb Player 2', 'O', @board)]
     @current_player = 0
   end
 
   def run
     board.show
 
-    until board.check_winner
-
-      result = @players[@current_player].make_move(board)
+    result = board.check_winner
+    until result
+      result = @players[@current_player].make_move
       @current_player = 1 - @current_player
       board.show
     end
