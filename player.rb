@@ -6,33 +6,27 @@
 class Player
   attr_reader :name, :symbol, :board
 
-  def initialize(name, symbol, board)
+  def initialize(name, symbol)
     @name = name
     @symbol = symbol
-    @board = board
   end
 
-  def make_move
+  def make_move(board)
     loop do
       puts "Waiting for #{name} ( #{symbol} ) :"
-
-      row, col = select_candidate
-      next if col.nil?
-      break if board.change_state(row, col, self)
-
-      puts 'Invalid move! Try again!'
-      puts ''
+      row, col = select_candidate(board)
+      begin
+        board.change_state(row, col, symbol)
+        break
+      rescue InvalidMoveError
+        puts 'Invalid move! Try again!'
+      end
     end
-    board.check_winner
-  end
-
-  def to_s
-    symbol
   end
 
   private
 
-  def select_candidate
+  def select_candidate(_)
     gets.split(',').map(&:to_i)
   end
 end
@@ -42,7 +36,7 @@ end
 class DumbPlayer < Player
   private
 
-  def select_candidate
+  def select_candidate(board)
     sleep(1)
     board.available_slots.sample
   end

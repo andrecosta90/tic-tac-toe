@@ -4,29 +4,66 @@ require './board'
 require './player'
 
 # Represents the game logic for a Tic-Tac-Toe game.
-# Manages the game flow, including player turns and checking for a winner or tie
+# Manages the game flow, including player turns
+# and checking for a winner or tie
 class Game
-  attr_reader :board
+  attr_reader :board, :current_player
 
-  def initialize
+  def initialize(first_player, second_player)
     @board = Board.new
-    @players = [Player.new('Player 1', 'X', @board), DumbPlayer.new('Dumb Player 2', 'O', @board)]
-    @current_player = 0
+    @players = [first_player, second_player]
+    @index = 0
+    @current_player = @players[@index]
+  end
+
+  def winner_in_rows_or_columns?(current_player)
+    (0..2).each do |i|
+      return true if board.grid[i].all?(current_player.symbol)
+      return true if board.grid.transpose[i].all?(current_player.symbol)
+    end
+    false
+  end
+
+  def winner_in_diagonals?(current_player)
+    grid = board.grid
+    return true if (0..2).map { |i| grid[i][i] }.all?(current_player.symbol)
+    return true if (0..2).map { |i| grid[grid.length - 1 - i][i] }.all?(current_player.symbol)
+
+    false
+  end
+
+  def player_has_won?
+    return true if winner_in_rows_or_columns?(current_player)
+    return true if winner_in_diagonals?(current_player)
+
+    false
+  end
+
+  def tie?
+    board.available_slots.empty?
   end
 
   def run
-    board.show
-
-    result = board.check_winner
-    until result
-      result = @players[@current_player].make_move
-      @current_player = 1 - @current_player
+    loop do
+      current_player.make_move(board)
       board.show
-    end
+      break puts "#{current_player.name} WINS!" if player_has_won?
+      break puts "It's a TIE!" if tie?
 
-    result[:tie] ? (puts "It's a TIE!") : (puts "#{result[:winner].name} WINS!")
+      switch_players!
+    end
+  end
+
+  private
+
+  def switch_players!
+    @index = 1 - @index
+    @current_player = @players[@index]
   end
 end
 
-game = Game.new
+first_player = Player.new('Player 1', 'X')
+second_player = DumbPlayer.new('Dumb Player 2', 'O')
+
+game = Game.new(first_player, second_player)
 puts game.run
