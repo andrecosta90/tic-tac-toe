@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require './board'
-require './player'
+require './lib/board'
+require './lib/player'
 
 # Represents the game logic for a Tic-Tac-Toe game.
 # Manages the game flow, including player turns
