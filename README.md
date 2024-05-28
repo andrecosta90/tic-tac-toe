@@ -7,7 +7,7 @@ This is a simple implementation of the Tic-Tac-Toe game in Ruby.
 To play the game, make sure you have Ruby installed on your system. Then, navigate to the directory containing the `game.rb` file and run the following command:
 
 ```bash
-ruby game.rb
+ruby main.rb
 ```
 
 ## How to Play

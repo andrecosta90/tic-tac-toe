@@ -8,12 +8,15 @@ class InvalidMoveError < StandardError; end
 class Board
   attr_reader :available_slots, :grid
 
-  def initialize
+  def initialize(verbose: true)
     @grid = Array.new(3) { Array.new(3, '_') }
     @available_slots = (0..2).to_a.product((0..2).to_a)
+    @verbose = verbose
   end
 
   def show
+    return unless @verbose
+
     puts
     puts(grid.map { |x| x.join(' | ') })
     puts

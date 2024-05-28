@@ -4,7 +4,7 @@
 # Each player has a name, a symbol representing their marker on the board,
 # and a reference to the game board.
 class Player
-  attr_reader :name, :symbol, :board
+  attr_reader :name, :symbol
 
   def initialize(name, symbol)
     @name = name

@@ -9,11 +9,22 @@ require './lib/player'
 class Game
   attr_reader :board, :current_player
 
-  def initialize(first_player, second_player)
-    @board = Board.new
+  def initialize(first_player, second_player, verbose: true)
+    @board = Board.new(verbose: verbose)
     @players = [first_player, second_player]
     @index = 0
     @current_player = @players[@index]
+  end
+
+  def run
+    loop do
+      current_player.make_move(board)
+      board.show
+      break puts "#{current_player.name} WINS!" if player_has_won?
+      break puts "It's a TIE!" if tie?
+
+      switch_players!
+    end
   end
 
   def winner_in_rows_or_columns?(current_player)
@@ -39,31 +50,14 @@ class Game
     false
   end
 
+  private
+
   def tie?
     board.available_slots.empty?
   end
-
-  def run
-    loop do
-      current_player.make_move(board)
-      board.show
-      break puts "#{current_player.name} WINS!" if player_has_won?
-      break puts "It's a TIE!" if tie?
-
-      switch_players!
-    end
-  end
-
-  private
 
   def switch_players!
     @index = 1 - @index
     @current_player = @players[@index]
   end
 end
-
-first_player = Player.new('Player 1', 'X')
-second_player = DumbPlayer.new('Dumb Player 2', 'O')
-
-game = Game.new(first_player, second_player)
-puts game.run
